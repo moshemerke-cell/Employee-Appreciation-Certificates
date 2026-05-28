@@ -1,0 +1,10 @@
+{
+  "name": "employee-appreciation-certificates",
+  "private": true,
+  "description": "Premium Health employee appreciation certificates",
+  "scripts": {
+    "start": "python3 -m http.server 3457 --directory employee-certificate/project",
+    "start:serve": "npx --yes serve employee-certificate/project -p 3456",
+    "open:digital": "open http://localhost:3457/Employee%20Certificate%20-%20Digital.html"
+  }
+}

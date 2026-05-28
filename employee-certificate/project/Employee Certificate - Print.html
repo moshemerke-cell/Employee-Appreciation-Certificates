@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Certificate of Recognition — Premium Health</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  /* ── Page setup: Letter landscape ──────────────────── */
+  @page {
+    size: 11in 8.5in;
+    margin: 0;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #c9c5be;
+    font-family: var(--font-body);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+  }
+
+  /* ── Certificate ─────────────────────────────────── */
+  .cert {
+    width: 11in;
+    height: 8.5in;
+    background: var(--color-cream);
+    color: var(--color-off-black);
+    box-shadow: 0 30px 80px -20px rgba(52,52,54,0.35),
+                0 8px 24px rgba(52,52,54,0.12);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0.55in 0.7in 0.6in;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Double gold frame */
+  .frame-outer {
+    position: absolute;
+    inset: 0.32in;
+    border: 1.5px solid var(--color-gold);
+    pointer-events: none;
+  }
+  .frame-inner {
+    position: absolute;
+    inset: 0.4in;
+    border: 0.5px solid var(--color-gold);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  /* Decorative corner ornaments */
+  .corner {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    pointer-events: none;
+  }
+  .corner svg { width: 100%; height: 100%; display: block; }
+  .corner.tl { top: 0.32in; left: 0.32in; }
+  .corner.tr { top: 0.32in; right: 0.32in; transform: scaleX(-1); }
+  .corner.bl { bottom: 0.32in; left: 0.32in; transform: scaleY(-1); }
+  .corner.br { bottom: 0.32in; right: 0.32in; transform: scale(-1,-1); }
+
+  /* Premium Health icon watermark — bottom-right */
+  .cert-watermark {
+    position: absolute;
+    right: -1.05in;
+    bottom: -1.2in;
+    width: 5.4in;
+    height: auto;
+    opacity: 0.26;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: multiply;
+  }
+
+  /* ── Layout ──────────────────────────────────────── */
+  .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  .logo {
+    height: 64px;
+    display: block;
+  }
+  .head-meta {
+    text-align: right;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    line-height: 1.6;
+  }
+  .head-meta .seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--color-gold);
+    border-radius: 50%;
+    color: var(--color-gold);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 8px;
+    letter-spacing: 0;
+  }
+
+  /* Eyebrow */
+  .award-label {
+    margin-top: 28px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    position: relative;
+    z-index: 1;
+  }
+  .award-label::before,
+  .award-label::after {
+    content: '';
+    display: inline-block;
+    width: 36px;
+    height: 1px;
+    background: var(--color-gold);
+    vertical-align: middle;
+    margin: 0 18px;
+    transform: translateY(-2px);
+  }
+
+  /* Award title */
+  .award-title {
+    margin: 14px 0 0;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    color: var(--color-off-black);
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Center stage */
+  .stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 6px;
+  }
+  .preamble {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--fg-secondary);
+    margin: 0 0 18px;
+    letter-spacing: 0.01em;
+  }
+  .recipient-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-off-black);
+    margin: 0;
+    padding: 0 12px 8px;
+    border-bottom: 1px solid rgba(183,132,73,0.35);
+    display: inline-block;
+    min-width: 540px;
+  }
+  .recipient-role {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin: 18px 0 28px;
+  }
+  .citation {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--color-off-black);
+    max-width: 720px;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .citation em {
+    font-style: italic;
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  /* Signatures */
+  .sigs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 56px;
+    margin-top: 36px;
+    position: relative;
+    z-index: 1;
+  }
+  .sig {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .sig-line {
+    width: 100%;
+    height: 1px;
+    background: var(--color-off-black);
+    opacity: 0.4;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .sig-script {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    font-family: var(--font-script);
+    color: var(--color-off-black);
+    opacity: 0.7;
+    font-size: 24px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .sig-name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--color-off-black);
+  }
+  .sig-title {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-secondary);
+    margin-top: 3px;
+  }
+
+  /* Footer row */
+  .foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 22px;
+    position: relative;
+    z-index: 1;
+  }
+  .foot-meta {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    line-height: 1.6;
+  }
+  .foot-date {
+    text-align: center;
+  }
+  .foot-date .lbl {
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 4px;
+  }
+  .foot-date .val {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-off-black);
+  }
+  .tagline {
+    font-family: var(--font-script);
+    font-size: 22px;
+    color: var(--color-gold);
+    line-height: 1;
+    text-align: right;
+    transform: translateY(-2px);
+  }
+
+  /* Fillable affordance — only on screen */
+  @media screen {
+    [contenteditable="true"]:hover {
+      background: rgba(183,132,73,0.06);
+      outline: 1px dashed rgba(183,132,73,0.4);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(183,132,73,0.08);
+      outline: 1px solid var(--color-gold);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    .hint {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-body);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: rgba(52,52,54,0.55);
+      background: rgba(255,255,255,0.85);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(52,52,54,0.1);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .cert { box-shadow: none; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+  <article class="cert" data-screen-label="Print Certificate">
+
+    <!-- Frame -->
+    <div class="frame-outer"></div>
+    <div class="frame-inner"></div>
+
+    <!-- Corner ornaments (botanical sprig) -->
+    <div class="corner tl">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#B78449" stroke-width="0.9" stroke-linecap="round">
+        <path d="M2 2 L18 2 M2 2 L2 18"/>
+        <path d="M2 2 C 14 8, 22 16, 28 28" stroke-width="0.7"/>
+        <path d="M6 6 C 10 10, 14 14, 18 18" stroke-width="0.5" opacity="0.6"/>
+        <circle cx="2" cy="2" r="2" fill="#B78449" stroke="none"/>
+        <circle cx="28" cy="28" r="1.2" fill="#B78449" stroke="none"/>
+        <path d="M10 4 Q 16 6, 22 4" stroke-width="0.5" opacity="0.6"/>
+        <path d="M4 10 Q 6 16, 4 22" stroke-width="0.5" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="corner tr">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#B78449" stroke-width="0.9" stroke-linecap="round">
+        <path d="M2 2 L18 2 M2 2 L2 18"/>
+        <path d="M2 2 C 14 8, 22 16, 28 28" stroke-width="0.7"/>
+        <path d="M6 6 C 10 10, 14 14, 18 18" stroke-width="0.5" opacity="0.6"/>
+        <circle cx="2" cy="2" r="2" fill="#B78449" stroke="none"/>
+        <circle cx="28" cy="28" r="1.2" fill="#B78449" stroke="none"/>
+      </svg>
+    </div>
+    <div class="corner bl">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#B78449" stroke-width="0.9" stroke-linecap="round">
+        <path d="M2 2 L18 2 M2 2 L2 18"/>
+        <path d="M2 2 C 14 8, 22 16, 28 28" stroke-width="0.7"/>
+        <circle cx="2" cy="2" r="2" fill="#B78449" stroke="none"/>
+        <circle cx="28" cy="28" r="1.2" fill="#B78449" stroke="none"/>
+      </svg>
+    </div>
+    <div class="corner br">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#B78449" stroke-width="0.9" stroke-linecap="round">
+        <path d="M2 2 L18 2 M2 2 L2 18"/>
+        <path d="M2 2 C 14 8, 22 16, 28 28" stroke-width="0.7"/>
+        <circle cx="2" cy="2" r="2" fill="#B78449" stroke="none"/>
+        <circle cx="28" cy="28" r="1.2" fill="#B78449" stroke="none"/>
+      </svg>
+    </div>
+
+    <img
+      class="cert-watermark"
+      src="assets/logos/premium-health-icon-gold.png"
+      alt=""
+      aria-hidden="true"
+      draggable="false"
+    />
+
+    <!-- Header -->
+    <header class="head">
+      <img src="assets/logos/horizontal-full-color.svg" class="logo" alt="Premium Health">
+      <div class="head-meta">
+        <div class="seal">PH</div>
+        <div>Certificate<br>No. <span contenteditable="true" spellcheck="false">2026‑001</span></div>
+      </div>
+    </header>
+
+    <!-- Award label -->
+    <div class="award-label">Certificate of Recognition</div>
+    <h1 class="award-title" contenteditable="true" spellcheck="false">Patient Outreach Champion</h1>
+
+    <!-- Center stage -->
+    <div class="stage">
+      <p class="preamble">We would like to recognize</p>
+      <div class="recipient-name" contenteditable="true" spellcheck="false">Recipient Name</div>
+      <div class="recipient-role" contenteditable="true" spellcheck="false">Role · Department</div>
+      <p class="citation">
+        for <em>her dedication to patient outreach</em> —
+        for the warmth, care, and unwavering commitment she brings to every
+        person who walks through our doors.
+      </p>
+    </div>
+
+    <!-- Signatures -->
+    <div class="sigs">
+      <div class="sig">
+        <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
+        <div class="sig-name" contenteditable="true" spellcheck="false">Practice Manager</div>
+        <div class="sig-title">Operations</div>
+      </div>
+      <div class="sig">
+        <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
+        <div class="sig-name" contenteditable="true" spellcheck="false">Medical Director</div>
+        <div class="sig-title">Clinical Leadership</div>
+      </div>
+      <div class="sig">
+        <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
+        <div class="sig-name" contenteditable="true" spellcheck="false">Chief Executive</div>
+        <div class="sig-title">Premium Health</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <div class="foot-meta">
+        Brooklyn, NY<br>
+        Premium Health Medical Group
+      </div>
+      <div class="foot-date">
+        <div class="lbl">Presented</div>
+        <div class="val" contenteditable="true" spellcheck="false">May 28, 2026</div>
+      </div>
+      <div class="tagline">Always Premium. Always Personal.</div>
+    </footer>
+
+  </article>
+
+  <div class="hint">Click any underlined field to edit · Press <kbd>⌘P</kbd> / <kbd>Ctrl+P</kbd> to print</div>
+</body>
+</html>
