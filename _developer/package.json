@@ -5,6 +5,8 @@
   "scripts": {
     "start": "python3 -m http.server 3457 --directory employee-certificate/project",
     "start:serve": "npx --yes serve employee-certificate/project -p 3456",
-    "open:digital": "open http://localhost:3457/Employee%20Certificate%20-%20Digital.html"
+    "open:digital": "open http://localhost:3457/Employee%20Certificate%20-%20Digital.html",
+    "build:portable": "python3 scripts/build-portable.py",
+    "package": "bash scripts/package-share.sh"
   }
 }

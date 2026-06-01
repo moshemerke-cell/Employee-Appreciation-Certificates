@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Certificate of Recognition — Premium Health (Digital)</title>
+<meta name="ext-resource-dependency" content="assets/logos/Horizontal Logo Full Color.svg" data-resource-id="logo" />
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: var(--font-body);
+    color: var(--color-white);
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(84,63,104,0.55), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(50,136,155,0.45), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 15% 85%, rgba(113,177,126,0.30), transparent 70%),
+      #14141a;
+  }
+  body.bg-light {
+    color: var(--color-off-black);
+    background: var(--color-cream);
+  }
+  body.bg-dark {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(84,63,104,0.55), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(50,136,155,0.45), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 15% 85%, rgba(113,177,126,0.30), transparent 70%),
+      #14141a;
+  }
+  body.bg-cream {
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 25%, rgba(183,132,73,0.18), transparent 70%),
+      #efe7dc;
+    color: var(--color-off-black);
+  }
+  body.bg-velvet {
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 40%, rgba(183,132,73,0.30), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(84,63,104,0.55), transparent 70%),
+      #1a1115;
+  }
+
+  /* Ambient bg grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.04) 0, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03) 0, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Stage — perspective ──────────────────────────── */
+  .stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1800px;
+    perspective-origin: 50% 50%;
+    z-index: 1;
+  }
+
+  /* The floating wrapper — gentle bob, drives tilt + scale */
+  .float {
+    --rx: 0;            /* mouse y normalized -1..1 → rotateX */
+    --ry: 0;            /* mouse x normalized -1..1 → rotateY */
+    --tilt: 14deg;
+    --float-y: 10px;
+    --float-x: 6px;
+    --float-rot: 1.2deg;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: floatBob 7s ease-in-out infinite;
+  }
+
+  @keyframes floatBob {
+    0%   { transform: translate3d(0, calc(var(--float-y) * -1), 0) rotateZ(calc(var(--float-rot) * -1)); }
+    50%  { transform: translate3d(var(--float-x), var(--float-y), 0) rotateZ(var(--float-rot)); }
+    100% { transform: translate3d(0, calc(var(--float-y) * -1), 0) rotateZ(calc(var(--float-rot) * -1)); }
+  }
+  body.no-float .float { animation: none; transform: none; }
+
+  /* The card — tracks tilt */
+  .tilt {
+    transform-style: preserve-3d;
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform:
+      rotateX(calc(var(--rx) * var(--tilt) * -1))
+      rotateY(calc(var(--ry) * var(--tilt)));
+  }
+  body.dragging .tilt { transition: none; }
+
+  /* ── Certificate (mirrors print styling) ──────────── */
+  .cert-3d {
+    --cw: 1100px;
+    --ch: 850px;
+    position: relative;
+    width: var(--cw);
+    height: var(--ch);
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 40px 70px rgba(0,0,0,0.55))
+            drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+  }
+
+  .cert {
+    width: 100%; height: 100%;
+    background: var(--color-cream);
+    color: var(--color-off-black);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 52px 68px 56px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    backface-visibility: hidden;
+  }
+
+  /* ── Holographic layers ───────────────────────────── */
+
+  /* Iridescent base — conic gradient that rotates with shine angle */
+  .holo-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: var(--holo-strength, 0.55);
+    mix-blend-mode: color-dodge;
+    background:
+      conic-gradient(
+        from var(--shine-angle, 220deg) at var(--shine-x, 50%) var(--shine-y, 50%),
+        rgba(84,63,104,0.0),
+        rgba(84,63,104,0.95) 12%,
+        rgba(50,136,155,0.95) 28%,
+        rgba(113,177,126,0.95) 44%,
+        rgba(235,224,101,0.95) 60%,
+        rgba(183,132,73,0.95) 76%,
+        rgba(84,63,104,0.95) 92%,
+        rgba(84,63,104,0.0) 100%
+      );
+    z-index: 4;
+  }
+
+  /* Iridescent diagonal stripes */
+  .holo-stripes {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: var(--holo-strength, 0.55);
+    mix-blend-mode: overlay;
+    background:
+      repeating-linear-gradient(
+        var(--stripe-angle, 110deg),
+        rgba(255,255,255,0) 0px,
+        rgba(255,255,255,0.06) 2px,
+        rgba(84,63,104,0.10) 4px,
+        rgba(50,136,155,0.10) 8px,
+        rgba(113,177,126,0.10) 12px,
+        rgba(235,224,101,0.10) 16px,
+        rgba(255,255,255,0) 22px
+      );
+    z-index: 5;
+  }
+
+  /* Specular shine — bright reflection that tracks angle */
+  .shine {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: var(--shine-strength, 0.7);
+    mix-blend-mode: screen;
+    background:
+      radial-gradient(
+        circle at var(--shine-x, 50%) var(--shine-y, 30%),
+        rgba(255,255,255,0.85) 0%,
+        rgba(255,255,255,0.45) 8%,
+        rgba(255,255,255,0.15) 20%,
+        rgba(255,255,255,0.0) 38%
+      );
+    z-index: 6;
+  }
+
+  /* Edge highlight */
+  .edge {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 7;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.4) 0%,
+        rgba(255,255,255,0) 12%,
+        rgba(255,255,255,0) 88%,
+        rgba(255,255,255,0.25) 100%
+      );
+    mix-blend-mode: overlay;
+    opacity: 0.7;
+  }
+
+  /* Grain overlay */
+  .grain {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC45IiBudW1PY3RhdmVzPSIyIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDEgMCAwIDAgMCAxIDAgMCAwIDAgMSAwIDAgMCAwLjUgMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNuKSIvPjwvc3ZnPg==");
+  }
+
+  /* Hide holo when disabled */
+  body.no-holo .holo-base,
+  body.no-holo .holo-stripes,
+  body.no-holo .edge,
+  body.no-holo .grain { display: none; }
+  body.no-shine .shine { display: none; }
+
+  /* ── Frame (gold double border) ───────────────────── */
+  .frame-outer, .frame-inner {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .frame-outer {
+    inset: 30px;
+    border: 1.5px solid var(--color-gold);
+  }
+  .frame-inner {
+    inset: 38px;
+    border: 0.5px solid var(--color-gold);
+    opacity: 0.55;
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .corner svg { width: 100%; height: 100%; display: block; }
+  .corner.tl { top: 30px; left: 30px; }
+  .corner.tr { top: 30px; right: 30px; transform: scaleX(-1); }
+  .corner.bl { bottom: 30px; left: 30px; transform: scaleY(-1); }
+  .corner.br { bottom: 30px; right: 30px; transform: scale(-1,-1); }
+
+  /* Premium Health icon watermark — bottom-right */
+  .cert-watermark {
+    position: absolute;
+    right: -120px;
+    bottom: -140px;
+    width: 600px;
+    height: auto;
+    opacity: 0.28;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+    user-select: none;
+  }
+
+  /* ── Content layout (same vocabulary as print) ────── */
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .logo { height: 60px; display: block; }
+  .head-meta {
+    text-align: right;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    line-height: 1.6;
+  }
+  .head-meta .seal {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    border: 1px solid var(--color-gold);
+    border-radius: 50%;
+    color: var(--color-gold);
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 18px; margin-bottom: 8px; letter-spacing: 0;
+  }
+
+  .award-label {
+    margin-top: 26px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+  .award-label::before,
+  .award-label::after {
+    content: '';
+    display: inline-block;
+    width: 36px; height: 1px;
+    background: var(--color-gold);
+    vertical-align: middle;
+    margin: 0 18px;
+    transform: translateY(-2px);
+  }
+  .award-title {
+    margin: 12px 0 0;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    color: var(--color-off-black);
+    text-transform: uppercase;
+  }
+
+  .stage-text {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .preamble {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--fg-secondary);
+    margin: 0 0 18px;
+  }
+  .recipient-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 78px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-off-black);
+    margin: 0;
+    padding: 0 12px 8px;
+    border-bottom: 1px solid rgba(183,132,73,0.35);
+    display: inline-block;
+    min-width: 540px;
+  }
+  .recipient-role {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin: 18px 0 26px;
+  }
+  .citation {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.55;
+    color: var(--color-off-black);
+    max-width: 720px;
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .citation em {
+    font-style: italic;
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .sigs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 52px;
+    margin-top: 32px;
+  }
+  .sig {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .sig-line {
+    width: 100%; height: 1px;
+    background: #000;
+    opacity: 1;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .sig-script {
+    position: absolute;
+    bottom: 4px; left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    font-family: var(--font-script);
+    color: #000;
+    opacity: 1;
+    font-size: 24px;
+    white-space: nowrap;
+  }
+  .sig-name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: #000;
+  }
+  .sig-title {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #000;
+    margin-top: 3px;
+  }
+
+  .foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 22px;
+  }
+  .foot-meta {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    line-height: 1.6;
+  }
+  .foot-date { text-align: center; }
+  .foot-date .lbl {
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 4px;
+  }
+  .foot-date .val {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-off-black);
+  }
+  .tagline {
+    font-family: var(--font-script);
+    font-size: 22px;
+    color: var(--color-gold);
+    line-height: 1;
+    text-align: right;
+    transform: translateY(-2px);
+  }
+
+  /* ── Help / instructions ──────────────────────────── */
+  .hint {
+    position: fixed;
+    bottom: 18px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.05);
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    pointer-events: none;
+  }
+  body.bg-cream .hint, body.bg-light .hint {
+    color: rgba(52,52,54,0.6);
+    background: rgba(255,255,255,0.6);
+    border-color: rgba(52,52,54,0.1);
+  }
+
+  /* ── Download control ─────────────────────────────── */
+  .download-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 100;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.9);
+    background: rgba(183,132,73,0.92);
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transition: transform 120ms ease, background 120ms ease;
+  }
+  .download-btn:hover { transform: translateY(-1px); background: #c49258; }
+  .download-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+  }
+  body.bg-cream .download-btn, body.bg-light .download-btn {
+    box-shadow: 0 4px 16px rgba(52,52,54,0.15);
+  }
+
+  /* ── Scale-to-fit ─────────────────────────────────── */
+  @media (max-width: 1280px), (max-height: 980px) {
+    .cert-3d {
+      transform: scale(0.78);
+      transform-origin: center;
+    }
+  }
+  @media (max-width: 960px), (max-height: 780px) {
+    .cert-3d { transform: scale(0.6); }
+  }
+  @media (max-width: 720px) {
+    .cert-3d { transform: scale(0.45); }
+  }
+</style>
+</head>
+<body class="bg-dark">
+  <template id="__bundler_thumbnail" data-bg-color="#14141a">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="thumbgrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#543F68"/>
+          <stop offset="35%" stop-color="#32889B"/>
+          <stop offset="68%" stop-color="#71B17E"/>
+          <stop offset="100%" stop-color="#EBE065"/>
+        </linearGradient>
+      </defs>
+      <rect x="260" y="170" width="680" height="460" rx="10" fill="#F3EDE6"/>
+      <rect x="290" y="200" width="620" height="400" fill="none" stroke="#B78449" stroke-width="3"/>
+      <path d="M600 280 l30 60 66 10 -48 46 12 66 -60 -32 -60 32 12 -66 -48 -46 66 -10z" fill="url(#thumbgrad)" opacity="0.55"/>
+      <rect x="420" y="430" width="360" height="6" fill="#B78449"/>
+      <rect x="460" y="460" width="280" height="4" fill="#343436" opacity="0.4"/>
+      <rect x="480" y="480" width="240" height="4" fill="#343436" opacity="0.3"/>
+      <rect x="340" y="540" width="110" height="2" fill="#343436" opacity="0.5"/>
+      <rect x="545" y="540" width="110" height="2" fill="#343436" opacity="0.5"/>
+      <rect x="750" y="540" width="110" height="2" fill="#343436" opacity="0.5"/>
+    </svg>
+  </template>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script type="text/babel" data-source="tweaks-panel.jsx">
+
+/* BEGIN USAGE */
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+// Exports (to window): useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSlider,
+//   TweakToggle, TweakRadio, TweakSelect, TweakText, TweakNumber, TweakColor, TweakButton.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// TweakRadio is the segmented control for 2–3 short options (auto-falls-back to
+// TweakSelect past ~16/~10 chars per label); reach for TweakSelect directly when
+// options are many or long. For color tweaks always curate 3-4 options rather than
+// a free picker; an option can also be a whole 2–5 color palette (the stored value
+// is the array). The Tweak* controls are a floor, not a ceiling — build custom
+// controls inside the panel if a tweak calls for UI they don't cover.
+/* END USAGE */
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+
+  .twk-open-btn{position:fixed;right:16px;bottom:16px;z-index:2147483646;
+    appearance:none;border:0;cursor:pointer;
+    font:600 12px/1 ui-sans-serif,system-ui,-apple-system,sans-serif;
+    letter-spacing:.04em;color:#29261b;
+    padding:10px 16px;border-radius:999px;
+    background:rgba(250,249,247,.92);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border:.5px solid rgba(255,255,255,.65);
+    box-shadow:0 4px 20px rgba(0,0,0,.2)}
+  .twk-open-btn:hover{background:#fff}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function isDesignHostEmbedded() {
+  try {
+    return window.parent !== window;
+  } catch {
+    return true;
+  }
+}
+
+function TweaksPanel({ title = 'Tweaks', children, defaultOpen }) {
+  // Open by default when viewed in a normal browser; stay closed in Claude Design
+  // until the host sends __activate_edit_mode.
+  const [open, setOpen] = React.useState(
+    defaultOpen ?? !isDesignHostEmbedded()
+  );
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) {
+    return (
+      <>
+        <style>{__TWEAKS_STYLE}</style>
+        <button
+          type="button"
+          className="twk-open-btn"
+          data-no-drag
+          aria-label="Open tweaks panel"
+          onClick={() => setOpen(true)}
+        >
+          {title}
+        </button>
+      </>
+    );
+  }
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-omelette-chrome=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+  </script>
+  <script type="text/babel" data-source="digital-cert.jsx">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const GENDER_OPTIONS = ["She", "He"];
+
+const PRONOUN_TO_HE = [
+  [/\bher\b/g, "his"],
+  [/\bHer\b/g, "His"],
+  [/\bshe\b/g, "he"],
+  [/\bShe\b/g, "He"],
+];
+const PRONOUN_TO_SHE = [
+  [/\bhis\b/g, "her"],
+  [/\bHis\b/g, "Her"],
+  [/\bhe\b/g, "she"],
+  [/\bHe\b/g, "She"],
+];
+
+function applyGenderToCitation(citation, gender) {
+  const pairs = gender === "He" ? PRONOUN_TO_HE : PRONOUN_TO_SHE;
+  let out = citation || "";
+  for (const [re, rep] of pairs) out = out.replace(re, rep);
+  return out;
+}
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  recipientName: "Sarah Goldstein",
+  recipientRole: "Patient Coordinator · Foster Ave",
+  gender: "She",
+  awardTitle: "Patient Outreach Champion",
+  certificateNumber: "2026-001",
+  citation:
+    "for *her dedication to patient outreach* — for the warmth, care, and unwavering commitment she brings to every person who walks through our doors.",
+  presentedDate: "May 28, 2026",
+  signature1: "Practice Manager",
+  signature1Title: "Operations",
+  signature2: "Medical Director",
+  signature2Title: "Clinical Leadership",
+  signature3: "Chief Executive",
+  signature3Title: "Premium Health",
+
+  background: "midnight",        // midnight | cream | velvet
+  shineStrength: 70,             // 0-100
+  holoStrength: 55,              // 0-100
+  tiltMax: 14,                   // 0-25 deg
+  floatAmplitude: 10,            // 0-24 px
+  followMouse: true,
+  showFloat: true,
+  showHolo: true,
+  showShine: true,
+}/*EDITMODE-END*/;
+
+const BG_LABELS = ["midnight", "velvet", "cream"];
+const BG_CLASS = {
+  midnight: "bg-dark",
+  velvet:   "bg-velvet",
+  cream:    "bg-cream",
+};
+
+function slugify(text) {
+  return (text || "certificate")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+async function downloadCertificatePng(recipientName) {
+  const cert = document.querySelector(".cert");
+  if (!cert || typeof html2canvas !== "function") {
+    throw new Error("Certificate capture is not available.");
+  }
+
+  const float = document.querySelector(".float");
+  const tilt = document.querySelector(".tilt");
+  const cert3d = document.querySelector(".cert-3d");
+  const saved = {
+    floatTransform: float?.style.transform,
+    floatAnimation: float?.style.animation,
+    tiltTransform: tilt?.style.transform,
+    cert3dTransform: cert3d?.style.transform,
+    cert3dFilter: cert3d?.style.filter,
+  };
+
+  if (float) {
+    float.style.animation = "none";
+    float.style.transform = "none";
+  }
+  if (tilt) tilt.style.transform = "none";
+  if (cert3d) {
+    cert3d.style.transform = "none";
+    cert3d.style.filter = "none";
+  }
+
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  try {
+    const canvas = await html2canvas(cert, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#F3EDE6",
+      logging: false,
+      width: cert.offsetWidth,
+      height: cert.offsetHeight,
+    });
+    const link = document.createElement("a");
+    link.download = `${slugify(recipientName)}-certificate.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } finally {
+    if (float) {
+      float.style.animation = saved.floatAnimation || "";
+      float.style.transform = saved.floatTransform || "";
+    }
+    if (tilt) tilt.style.transform = saved.tiltTransform || "";
+    if (cert3d) {
+      cert3d.style.transform = saved.cert3dTransform || "";
+      cert3d.style.filter = saved.cert3dFilter || "";
+    }
+  }
+}
+
+function CornerOrnament() {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" stroke="#B78449" strokeWidth="0.9" strokeLinecap="round">
+      <path d="M2 2 L18 2 M2 2 L2 18"/>
+      <path d="M2 2 C 14 8, 22 16, 28 28" strokeWidth="0.7"/>
+      <path d="M6 6 C 10 10, 14 14, 18 18" strokeWidth="0.5" opacity="0.6"/>
+      <circle cx="2" cy="2" r="2" fill="#B78449" stroke="none"/>
+      <circle cx="28" cy="28" r="1.2" fill="#B78449" stroke="none"/>
+      <path d="M10 4 Q 16 6, 22 4" strokeWidth="0.5" opacity="0.6"/>
+      <path d="M4 10 Q 6 16, 4 22" strokeWidth="0.5" opacity="0.6"/>
+    </svg>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [downloading, setDownloading] = useState(false);
+  const certRef = useRef(null);
+  const floatRef = useRef(null);
+
+  const handleDownload = useCallback(async () => {
+    setDownloading(true);
+    try {
+      await downloadCertificatePng(t.recipientName);
+    } catch (err) {
+      console.error(err);
+      window.alert("Could not export the certificate image. Try again or use Print → Save as PDF.");
+    } finally {
+      setDownloading(false);
+    }
+  }, [t.recipientName]);
+
+  /* Mouse → tilt + shine angle ─────────────────────────────────── */
+  useEffect(() => {
+    const cert = certRef.current;
+    if (!cert) return;
+
+    let rafId = 0;
+    let target = { rx: 0, ry: 0 };
+    let current = { rx: 0, ry: 0 };
+
+    function onMove(e) {
+      if (!t.followMouse) return;
+      const r = cert.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      // normalize to -1..1, with damping outside the card
+      const nx = Math.max(-1.4, Math.min(1.4, (e.clientX - cx) / (r.width / 2)));
+      const ny = Math.max(-1.4, Math.min(1.4, (e.clientY - cy) / (r.height / 2)));
+      target.rx = ny;
+      target.ry = nx;
+    }
+    function onLeave() {
+      target.rx = 0;
+      target.ry = 0;
+    }
+
+    function tick() {
+      // ease toward target
+      current.rx += (target.rx - current.rx) * 0.12;
+      current.ry += (target.ry - current.ry) * 0.12;
+      const rx = current.rx;
+      const ry = current.ry;
+      cert.style.setProperty('--rx', rx.toFixed(3));
+      cert.style.setProperty('--ry', ry.toFixed(3));
+
+      // shine position: highlight opposite the tilt (where reflection lands)
+      const shineX = 50 + ry * 40;
+      const shineY = 50 - rx * 40;
+      cert.style.setProperty('--shine-x', shineX + '%');
+      cert.style.setProperty('--shine-y', shineY + '%');
+
+      // angle of shine for conic gradient
+      const angleRad = Math.atan2(rx, ry);
+      const angleDeg = (angleRad * 180 / Math.PI) + 90;
+      cert.style.setProperty('--shine-angle', angleDeg + 'deg');
+      cert.style.setProperty('--stripe-angle', (110 + ry * 30) + 'deg');
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseout', onLeave);
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseout', onLeave);
+      cancelAnimationFrame(rafId);
+    };
+  }, [t.followMouse]);
+
+  /* Drag-to-rotate ─────────────────────────────────────────────── */
+  useEffect(() => {
+    const cert = certRef.current;
+    if (!cert) return;
+    let dragging = false;
+    let start = { x: 0, y: 0 };
+
+    function onDown(e) {
+      if (e.target.closest('[data-no-drag]')) return;
+      dragging = true;
+      document.body.classList.add('dragging');
+      start.x = e.clientX;
+      start.y = e.clientY;
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      const dx = (e.clientX - start.x) / 120;
+      const dy = (e.clientY - start.y) / 120;
+      const ry = Math.max(-1.4, Math.min(1.4, dx));
+      const rx = Math.max(-1.4, Math.min(1.4, dy));
+      cert.style.setProperty('--rx', rx.toFixed(3));
+      cert.style.setProperty('--ry', ry.toFixed(3));
+      const shineX = 50 + ry * 40;
+      const shineY = 50 - rx * 40;
+      cert.style.setProperty('--shine-x', shineX + '%');
+      cert.style.setProperty('--shine-y', shineY + '%');
+      const angleDeg = (Math.atan2(rx, ry) * 180 / Math.PI) + 90;
+      cert.style.setProperty('--shine-angle', angleDeg + 'deg');
+    }
+    function onUp() {
+      dragging = false;
+      document.body.classList.remove('dragging');
+    }
+
+    cert.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      cert.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, []);
+
+  /* Body class for background + toggles ────────────────────────── */
+  useEffect(() => {
+    document.body.className = '';
+    document.body.classList.add(BG_CLASS[t.background] || 'bg-dark');
+    if (!t.showFloat) document.body.classList.add('no-float');
+    if (!t.showHolo)  document.body.classList.add('no-holo');
+    if (!t.showShine) document.body.classList.add('no-shine');
+  }, [t.background, t.showFloat, t.showHolo, t.showShine]);
+
+  /* CSS vars for tweak intensities ─────────────────────────────── */
+  useEffect(() => {
+    const cert = certRef.current;
+    if (!cert) return;
+    cert.style.setProperty('--tilt', t.tiltMax + 'deg');
+    cert.style.setProperty('--shine-strength', (t.shineStrength / 100).toFixed(2));
+    cert.style.setProperty('--holo-strength', (t.holoStrength / 100).toFixed(2));
+    const f = floatRef.current;
+    if (f) {
+      f.style.setProperty('--float-y', t.floatAmplitude + 'px');
+      f.style.setProperty('--float-x', (t.floatAmplitude * 0.6) + 'px');
+    }
+  }, [t.tiltMax, t.shineStrength, t.holoStrength, t.floatAmplitude]);
+
+  return (
+    <React.Fragment>
+      <div className="stage">
+        <div className="float" ref={floatRef}>
+          <div className="tilt" ref={certRef}>
+            <div className="cert-3d">
+              <article className="cert">
+
+                <img
+                  className="cert-watermark"
+                  src="assets/logos/Icon_Art_1.svg"
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                />
+
+                {/* Frame */}
+                <div className="frame-outer"></div>
+                <div className="frame-inner"></div>
+
+                {/* Corners */}
+                <div className="corner tl"><CornerOrnament/></div>
+                <div className="corner tr"><CornerOrnament/></div>
+                <div className="corner bl"><CornerOrnament/></div>
+                <div className="corner br"><CornerOrnament/></div>
+
+                {/* Content */}
+                <div className="content">
+                  <header className="head">
+                    <img src={(window.__resources && window.__resources.logo) || "assets/logos/Horizontal Logo Full Color.svg"} className="logo" alt="Premium Health"/>
+                  </header>
+
+                  <div className="award-label">Certificate of Recognition</div>
+                  <h1 className="award-title">{t.awardTitle}</h1>
+
+                  <div className="stage-text">
+                    <p className="preamble">We would like to recognize</p>
+                    <div className="recipient-name">{t.recipientName}</div>
+                    <div className="recipient-role">{t.recipientRole}</div>
+                    <p className="citation">
+                      {t.citation.split(/(\*[^*]+\*)/g).map((part, i) =>
+                        part.startsWith("*") && part.endsWith("*") ? (
+                          <em key={i}>{part.slice(1, -1)}</em>
+                        ) : (
+                          <React.Fragment key={i}>{part}</React.Fragment>
+                        )
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="sigs">
+                    <div className="sig">
+                      <div className="sig-line"><span className="sig-script">signature</span></div>
+                      <div className="sig-name">{t.signature1}</div>
+                      <div className="sig-title">{t.signature1Title}</div>
+                    </div>
+                    <div className="sig">
+                      <div className="sig-line"><span className="sig-script">signature</span></div>
+                      <div className="sig-name">{t.signature2}</div>
+                      <div className="sig-title">{t.signature2Title}</div>
+                    </div>
+                    <div className="sig">
+                      <div className="sig-line"><span className="sig-script">signature</span></div>
+                      <div className="sig-name">{t.signature3}</div>
+                      <div className="sig-title">{t.signature3Title}</div>
+                    </div>
+                  </div>
+
+                  <footer className="foot">
+                    <div className="foot-meta">
+                      Brooklyn, NY<br/>
+                      Premium Health Medical Group
+                    </div>
+                    <div className="foot-date">
+                      <div className="lbl">Presented</div>
+                      <div className="val">{t.presentedDate}</div>
+                    </div>
+                    <div className="tagline">Always Premium. Always Personal.</div>
+                  </footer>
+                </div>
+
+                {/* Holographic layers (above content so they tint everything) */}
+                <div className="holo-base"></div>
+                <div className="holo-stripes"></div>
+                <div className="shine"></div>
+                <div className="edge"></div>
+                <div className="grain"></div>
+
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        className="download-btn"
+        data-no-drag
+        disabled={downloading}
+        onClick={handleDownload}
+      >
+        {downloading ? "Exporting…" : "Download PNG"}
+      </button>
+
+      <div className="hint">Move the cursor to tilt · drag to rotate · Download PNG for a flat image</div>
+
+      <TweaksPanel>
+        <TweakSection label="Recipient"/>
+        <TweakText label="Name" value={t.recipientName}
+          onChange={(v) => setTweak('recipientName', v)}/>
+        <TweakText label="Role" value={t.recipientRole}
+          onChange={(v) => setTweak('recipientRole', v)}/>
+        <TweakRadio label="Gender" value={t.gender}
+          options={GENDER_OPTIONS}
+          onChange={(v) => setTweak({
+            gender: v,
+            citation: applyGenderToCitation(t.citation, v),
+          })}/>
+        <TweakText label="Award title" value={t.awardTitle}
+          onChange={(v) => setTweak('awardTitle', v)}/>
+        <TweakText label="Certificate no." value={t.certificateNumber}
+          onChange={(v) => setTweak('certificateNumber', v)}/>
+        <TweakText label="Date" value={t.presentedDate}
+          onChange={(v) => setTweak('presentedDate', v)}/>
+        <TweakText label="Citation" value={t.citation}
+          onChange={(v) => setTweak('citation', v)}/>
+
+        <TweakSection label="Signatures"/>
+        <TweakText label="Signer 1" value={t.signature1}
+          onChange={(v) => setTweak('signature1', v)}/>
+        <TweakText label="Signer 1 title" value={t.signature1Title}
+          onChange={(v) => setTweak('signature1Title', v)}/>
+        <TweakText label="Signer 2" value={t.signature2}
+          onChange={(v) => setTweak('signature2', v)}/>
+        <TweakText label="Signer 2 title" value={t.signature2Title}
+          onChange={(v) => setTweak('signature2Title', v)}/>
+        <TweakText label="Signer 3" value={t.signature3}
+          onChange={(v) => setTweak('signature3', v)}/>
+        <TweakText label="Signer 3 title" value={t.signature3Title}
+          onChange={(v) => setTweak('signature3Title', v)}/>
+
+        <TweakSection label="Holographic effect"/>
+        <TweakSlider label="Shine intensity" value={t.shineStrength}
+          min={0} max={100} unit="%"
+          onChange={(v) => setTweak('shineStrength', v)}/>
+        <TweakSlider label="Holographic intensity" value={t.holoStrength}
+          min={0} max={100} unit="%"
+          onChange={(v) => setTweak('holoStrength', v)}/>
+        <TweakToggle label="Shine reflection" value={t.showShine}
+          onChange={(v) => setTweak('showShine', v)}/>
+        <TweakToggle label="Iridescent sheen" value={t.showHolo}
+          onChange={(v) => setTweak('showHolo', v)}/>
+
+        <TweakSection label="Motion"/>
+        <TweakSlider label="Tilt angle" value={t.tiltMax}
+          min={0} max={25} unit="°"
+          onChange={(v) => setTweak('tiltMax', v)}/>
+        <TweakSlider label="Float amplitude" value={t.floatAmplitude}
+          min={0} max={24} unit="px"
+          onChange={(v) => setTweak('floatAmplitude', v)}/>
+        <TweakToggle label="Follow cursor" value={t.followMouse}
+          onChange={(v) => setTweak('followMouse', v)}/>
+        <TweakToggle label="Floating animation" value={t.showFloat}
+          onChange={(v) => setTweak('showFloat', v)}/>
+
+        <TweakSection label="Background"/>
+        <TweakRadio label="Backdrop" value={t.background}
+          options={BG_LABELS}
+          onChange={(v) => setTweak('background', v)}/>
+
+        <TweakSection label="Export"/>
+        <TweakButton
+          label={downloading ? "Exporting PNG…" : "Download certificate PNG"}
+          onClick={handleDownload}
+        />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

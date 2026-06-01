@@ -2,7 +2,15 @@
 
 Premium Health employee recognition certificates — interactive digital version and print-ready layout, based on the [Claude Design](https://claude.ai/design) handoff bundle.
 
-## Quick start
+## Share with others (Tweaks panel works)
+
+1. Run `npm run package` — creates `dist/Premium-Health-Certificate-Share.zip`
+2. Send the zip plus `HOW TO USE.txt`
+3. Recipients double-click **Open Certificate.command** (Mac) or **Open Certificate.bat** (Windows)
+
+Do **not** send only the old `(standalone).html` file; it is outdated and hides the Tweaks panel.
+
+## Quick start (local development)
 
 1. **Serve the project folder** (required so fonts and JSX load correctly):
 
@@ -27,7 +35,8 @@ Premium Health employee recognition certificates — interactive digital version
 |------|---------|
 | `employee-certificate/project/Employee Certificate - Digital.html` | Main editable digital certificate with 3D tilt, holographic sheen, and tweaks panel |
 | `employee-certificate/project/Employee Certificate - Print.html` | Letter-size print layout (⌘P / Ctrl+P) |
-| `employee-certificate/project/Employee Certificate - Digital (standalone).html` | Single-file shareable copy (~3.7MB, fonts inlined) — open directly in a browser |
+| `employee-certificate/project/Employee Certificate - Portable.html` | Shareable copy with JSX inlined — open from the `project` folder (keep `fonts/` + `assets/`) |
+| `Open Certificate.command` / `Open Certificate.bat` | Double-click launchers — start a local server and open the app |
 | `employee-certificate/project/digital-cert.jsx` | React app: certificate UI + export |
 | `employee-certificate/project/colors_and_type.css` | Brand tokens, fonts, typography |
 | `employee-certificate/chats/` | Design conversation transcript |

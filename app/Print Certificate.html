@@ -237,8 +237,8 @@
   .sig-line {
     width: 100%;
     height: 1px;
-    background: var(--color-off-black);
-    opacity: 0.4;
+    background: #000;
+    opacity: 1;
     margin-bottom: 8px;
     position: relative;
   }
@@ -248,18 +248,17 @@
     left: 50%;
     transform: translateX(-50%) rotate(-4deg);
     font-family: var(--font-script);
-    color: var(--color-off-black);
-    opacity: 0.7;
+    color: #000;
+    opacity: 1;
     font-size: 24px;
     white-space: nowrap;
-    pointer-events: none;
   }
   .sig-name {
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 0.04em;
-    color: var(--color-off-black);
+    color: #000;
   }
   .sig-title {
     font-family: var(--font-body);
@@ -267,7 +266,7 @@
     font-size: 11px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--fg-secondary);
+    color: #000;
     margin-top: 3px;
   }
 
@@ -344,12 +343,53 @@
       backdrop-filter: blur(8px);
       pointer-events: none;
     }
+    .gender-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: rgba(52,52,54,0.6);
+      background: rgba(255,255,255,0.85);
+      padding: 6px 6px 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(52,52,54,0.1);
+      backdrop-filter: blur(8px);
+    }
+    .gender-seg {
+      display: flex;
+      background: rgba(52,52,54,0.08);
+      border-radius: 999px;
+      padding: 2px;
+    }
+    .gender-seg button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      font-weight: 600;
+      color: rgba(52,52,54,0.45);
+      padding: 3px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+    }
+    .gender-seg button[aria-pressed="true"] {
+      background: white;
+      color: rgba(52,52,54,0.9);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
   }
 
   @media print {
     body { background: white; padding: 0; }
     .cert { box-shadow: none; }
     .hint { display: none; }
+    .gender-toggle { display: none; }
   }
 </style>
 </head>
@@ -400,7 +440,7 @@
 
     <img
       class="cert-watermark"
-      src="assets/logos/premium-health-icon-gold.png"
+      src="assets/logos/Icon_Art_1.svg"
       alt=""
       aria-hidden="true"
       draggable="false"
@@ -408,11 +448,7 @@
 
     <!-- Header -->
     <header class="head">
-      <img src="assets/logos/horizontal-full-color.svg" class="logo" alt="Premium Health">
-      <div class="head-meta">
-        <div class="seal">PH</div>
-        <div>Certificate<br>No. <span contenteditable="true" spellcheck="false">2026‑001</span></div>
-      </div>
+      <img src="assets/logos/Horizontal Logo Full Color.svg" class="logo" alt="Premium Health">
     </header>
 
     <!-- Award label -->
@@ -425,8 +461,8 @@
       <div class="recipient-name" contenteditable="true" spellcheck="false">Recipient Name</div>
       <div class="recipient-role" contenteditable="true" spellcheck="false">Role · Department</div>
       <p class="citation">
-        for <em>her dedication to patient outreach</em> —
-        for the warmth, care, and unwavering commitment she brings to every
+        for <em><span class="gp" data-she="her" data-he="his">her</span> dedication to patient outreach</em> —
+        for the warmth, care, and unwavering commitment <span class="gp" data-she="she" data-he="he">she</span> brings to every
         person who walks through our doors.
       </p>
     </div>
@@ -436,17 +472,17 @@
       <div class="sig">
         <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
         <div class="sig-name" contenteditable="true" spellcheck="false">Practice Manager</div>
-        <div class="sig-title">Operations</div>
+        <div class="sig-title" contenteditable="true" spellcheck="false">Operations</div>
       </div>
       <div class="sig">
         <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
         <div class="sig-name" contenteditable="true" spellcheck="false">Medical Director</div>
-        <div class="sig-title">Clinical Leadership</div>
+        <div class="sig-title" contenteditable="true" spellcheck="false">Clinical Leadership</div>
       </div>
       <div class="sig">
         <div class="sig-line"><span class="sig-script" contenteditable="true" spellcheck="false">signature</span></div>
         <div class="sig-name" contenteditable="true" spellcheck="false">Chief Executive</div>
-        <div class="sig-title">Premium Health</div>
+        <div class="sig-title" contenteditable="true" spellcheck="false">Premium Health</div>
       </div>
     </div>
 
@@ -465,6 +501,24 @@
 
   </article>
 
-  <div class="hint">Click any underlined field to edit · Press <kbd>⌘P</kbd> / <kbd>Ctrl+P</kbd> to print</div>
+  <div class="hint">Click any field to edit · Press <kbd>⌘P</kbd> / <kbd>Ctrl+P</kbd> to print</div>
+
+  <div class="gender-toggle">
+    <span>Pronouns</span>
+    <div class="gender-seg" role="group" aria-label="Gender pronouns">
+      <button id="btn-she" aria-pressed="true" onclick="setGender('she')">She / Her</button>
+      <button id="btn-he"  aria-pressed="false" onclick="setGender('he')">He / His</button>
+    </div>
+  </div>
+
+  <script>
+    function setGender(g) {
+      document.querySelectorAll('.gp').forEach(function(el) {
+        el.textContent = el.dataset[g];
+      });
+      document.getElementById('btn-she').setAttribute('aria-pressed', g === 'she');
+      document.getElementById('btn-he').setAttribute('aria-pressed', g === 'he');
+    }
+  </script>
 </body>
 </html>

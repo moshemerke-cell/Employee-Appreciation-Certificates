@@ -1,0 +1,56 @@
+Premium Health — Employee Appreciation Certificates
+===================================================
+
+
+STEP 1 — Open the certificate builder
+--------------------------------------
+Mac:     Double-click  "Open Digital Certificate — Mac.command"
+Windows: Double-click  "Open Digital Certificate — Windows.bat"
+
+Your browser opens automatically with the certificate. A "Tweaks" panel
+appears in the bottom-right corner where you fill in the employee's name,
+role, award title, citation, and more.
+
+
+STEP 2 — Customize the certificate
+------------------------------------
+In the Tweaks panel (bottom-right), edit:
+  • Name, role, and gender
+  • Award title and certificate number
+  • Date and citation text
+  • Signer names and titles
+  • Background color, shine, and motion effects
+
+
+STEP 3 — Save or print
+-----------------------
+  Digital (PNG image):  Click "Download PNG" (top-right corner of the screen)
+  Printable PDF:        Open  "app / Print Certificate.html"
+                        then use File > Print > Save as PDF in your browser
+
+
+---
+
+ALTERNATIVE — Open without the launcher
+-----------------------------------------
+If you prefer to just double-click an HTML file directly, go into the
+"app" folder and open:
+
+  "Digital Certificate.html"  — interactive version with Tweaks panel
+  "Print Certificate.html"    — clean printable layout (letter landscape)
+
+Both files work by double-clicking — no launcher needed.
+
+
+TROUBLESHOOTING
+---------------
+Tweaks panel not showing?
+  → Look for a small "Tweaks" button in the bottom-right and click it.
+  → Or use the launcher (Step 1 above) instead of double-clicking the HTML.
+
+Browser says "can't open file"?
+  → Use the launcher (Step 1) — it starts a local server for you.
+
+Fonts look wrong?
+  → The "app/fonts" folder must stay next to the HTML files. Do not move
+    files out of the "app" folder individually.
