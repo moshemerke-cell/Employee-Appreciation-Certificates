@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Certificate of Recognition — Premium Health (Digital)</title>
-<meta name="ext-resource-dependency" content="assets/logos/Horizontal Logo Full Color.svg" data-resource-id="logo" />
+<meta name="ext-resource-dependency" content="assets/logos/Stacked Logo Full Color@4x.png" data-resource-id="logo" />
 <link rel="stylesheet" href="colors_and_type.css">
 <style>
   html, body {
@@ -281,10 +281,10 @@
   }
   .head {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
   }
-  .logo { height: 60px; display: block; }
+  .logo { height: 90px; display: block; }
   .head-meta {
     text-align: right;
     font-family: var(--font-body);
@@ -1452,7 +1452,7 @@ function App() {
                 {/* Content */}
                 <div className="content">
                   <header className="head">
-                    <img src={(window.__resources && window.__resources.logo) || "assets/logos/Horizontal Logo Full Color.svg"} className="logo" alt="Premium Health"/>
+                    <img src={(window.__resources && window.__resources.logo) || "assets/logos/Stacked Logo Full Color@4x.png"} className="logo" alt="Premium Health"/>
                   </header>
 
                   <div className="award-label">Certificate of Recognition</div>
@@ -1494,7 +1494,7 @@ function App() {
                   <footer className="foot">
                     <div className="foot-meta">
                       Brooklyn, NY<br/>
-                      Premium Health Medical Group
+                      Premium Health Center
                     </div>
                     <div className="foot-date">
                       <div className="lbl">Presented</div>
